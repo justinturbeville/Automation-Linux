@@ -1,0 +1,18 @@
+---
+    - hosts: yum
+      become: true
+      become_method: sudo
+      tasks: 
+          - name: Install Cockpit
+            become: true
+            yum:
+              state: present
+              name:
+                - cockpit
+
+          - name: Enabling and Starting Cockpit
+            systemd:
+              name: 'cockpit'
+              state: started
+              enabled: yes
+...
