@@ -1,0 +1,30 @@
+---
+- name: Install and configure Chrony
+  hosts: radius_servers
+  become: yes
+  tasks:
+    - name: Install Chrony package
+      apt:
+        name: chrony
+        state: present
+        update_cache: yes
+
+    - name: Remove existing pool configurations
+      lineinfile:
+        path: /etc/chrony/chrony.conf
+        regexp: '^pool '
+        state: absent
+
+    - name: Configure Chrony to use time.eigrp.org
+      lineinfile:
+        path: /etc/chrony/chrony.conf
+        insertafter: EOF
+        line: 'pool time.eigrp.org iburst'
+        state: present
+      notify: Restart Chrony
+
+  handlers:
+    - name: Restart Chrony
+      service:
+        name: chrony
+        state: restarted

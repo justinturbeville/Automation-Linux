@@ -1,0 +1,14 @@
+---
+- name: Update and Upgrade App Prodution Servers
+  hosts: app_prod_servers
+  become: yes
+  tasks:
+    - name: Update apt package list
+      apt:
+        update_cache: yes
+
+    - name: Upgrade all packages
+      apt:
+        upgrade: dist
+        autoremove: yes
+        autoclean: yes

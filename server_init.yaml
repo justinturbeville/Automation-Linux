@@ -1,0 +1,25 @@
+---
+- name: Update and Upgrade App Prodution Servers
+  hosts: radius_servers
+  become: yes
+  tasks:
+    - name: Update apt package list
+      apt:
+        update_cache: yes
+
+    - name: Upgrade all packages
+      apt:
+        upgrade: dist
+        autoremove: yes
+        autoclean: yes
+
+    - name: Install qemu-guest-agent
+      apt:
+        name: qemu-guest-agent
+        state: present
+
+    - name: Enable and start qemu-guest-agent service
+      systemd:
+        name: qemu-guest-agent
+        enabled: yes
+        state: started
